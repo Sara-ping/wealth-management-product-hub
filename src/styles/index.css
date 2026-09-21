@@ -1,0 +1,213 @@
+@import 'tailwindcss';
+
+@theme {
+  /* Palette — premium international banking */
+  --color-navy-950: #050f22;
+  --color-navy-900: #0a1e3c;
+  --color-navy-850: #0e2749;
+  --color-navy-800: #14335f;
+  --color-navy-700: #1d4680;
+  --color-navy-600: #2a5a99;
+
+  --color-gold-600: #8f6f3a;
+  --color-gold-500: #b08d57;
+  --color-gold-400: #c9a877;
+  --color-gold-100: #f4ecdd;
+
+  --color-teal-700: #0b5653;
+  --color-teal-600: #0f6e6b;
+  --color-teal-500: #148a86;
+  --color-teal-100: #e2f1f0;
+
+  --color-paper: #f7f6f2;
+  --color-paper-2: #efece5;
+  --color-ink: #101a2b;
+  --color-ink-soft: #33405a;
+  --color-muted: #5f6b7f;
+  --color-faint: #8b93a3;
+  --color-line: #e2dfd7;
+  --color-line-strong: #cfcabd;
+
+  --color-positive: #1f7a5a;
+  --color-caution: #a8661b;
+  --color-negative: #9d3b3b;
+
+  --font-sans: 'IBM Plex Sans', 'PingFang SC', 'Microsoft YaHei', 'Hiragino Sans GB',
+    'Source Han Sans SC', 'Noto Sans CJK SC', system-ui, -apple-system, sans-serif;
+  --font-serif: 'IBM Plex Serif', 'Source Han Serif SC', 'Songti SC', 'SimSun',
+    Georgia, serif;
+  --font-mono: 'IBM Plex Mono', 'SFMono-Regular', ui-monospace, monospace;
+
+  --shadow-card: 0 1px 2px rgba(10, 30, 60, 0.04), 0 8px 24px -16px rgba(10, 30, 60, 0.16);
+  --shadow-lift: 0 2px 4px rgba(10, 30, 60, 0.05), 0 18px 40px -24px rgba(10, 30, 60, 0.28);
+
+  --radius-card: 4px;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-feature-settings: 'kern', 'liga';
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: var(--color-gold-100);
+    color: var(--color-navy-900);
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-serif);
+    letter-spacing: -0.01em;
+    color: var(--color-navy-900);
+  }
+
+  /* Chinese reads better with a sans display face on screen */
+  html[data-lang='zh'] h1,
+  html[data-lang='zh'] h2,
+  html[data-lang='zh'] h3 {
+    font-family: var(--font-sans);
+    letter-spacing: 0;
+    font-weight: 600;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-gold-500);
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  .shell {
+    width: 100%;
+    max-width: 1240px;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+
+  @media (min-width: 768px) {
+    .shell {
+      padding-inline: 2rem;
+    }
+  }
+
+  /* Section eyebrow label */
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-gold-600);
+    font-weight: 500;
+  }
+
+  .eyebrow-dark {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-gold-400);
+    font-weight: 500;
+  }
+
+  .card {
+    background: #ffffff;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card);
+  }
+
+  .card-hover {
+    transition:
+      border-color 0.25s ease,
+      box-shadow 0.25s ease,
+      transform 0.25s ease;
+  }
+
+  .card-hover:hover {
+    border-color: var(--color-line-strong);
+    box-shadow: var(--shadow-lift);
+    transform: translateY(-2px);
+  }
+
+  .hairline {
+    border-color: var(--color-line);
+  }
+
+  /* Faint graph-paper background used behind hero / dark panels */
+  .grid-field {
+    background-image:
+      linear-gradient(to right, rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+    background-size: 64px 64px;
+  }
+
+  .grid-field-light {
+    background-image:
+      linear-gradient(to right, rgba(10, 30, 60, 0.045) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(10, 30, 60, 0.045) 1px, transparent 1px);
+    background-size: 56px 56px;
+  }
+
+  .rule-gold {
+    background: linear-gradient(90deg, var(--color-gold-500), rgba(176, 141, 87, 0));
+    height: 1px;
+  }
+
+  .num {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+/* Scroll reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 0.6s cubic-bezier(0.2, 0.6, 0.2, 1),
+    transform 0.6s cubic-bezier(0.2, 0.6, 0.2, 1);
+  will-change: opacity, transform;
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  html {
+    scroll-behavior: auto;
+  }
+}
