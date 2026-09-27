@@ -4,7 +4,13 @@ import tailwindcss from '@tailwindcss/vite'
 import { defineConfig } from 'vite'
 
 // https://vite.dev/config/
+//
+// `base` is driven by an env var so the same build works in three places:
+//   - local dev / root-domain hosts: BASE_PATH unset  -> '/'
+//   - GitHub Pages project site:     BASE_PATH=/wealth-management-product-hub/
+//   - Cloudflare / Vercel / Netlify: BASE_PATH unset  -> '/'
 export default defineConfig({
+  base: process.env.BASE_PATH || '/',
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
