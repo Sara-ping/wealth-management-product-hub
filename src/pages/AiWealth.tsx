@@ -308,11 +308,11 @@ export default function AiWealth() {
               {
                 label: c.caseStudies[3].title,
                 to: '/case-studies#ai-wealth-advisor',
-                hint: 'Full requirements and metrics',
+                hint: t.hints.fullRequirements,
               },
-              { label: c.navItems[4].label, to: '/digital-wealth', hint: 'Where AI plugs in' },
-              { label: t.common.poLens, to: '/product-owner', hint: 'Stories, KPIs, risk register' },
-              { label: c.navItems[2].label, to: '/product-logic', hint: 'Rules AI must respect' },
+              { label: t.nav.digital, to: '/digital-wealth', hint: t.hints.whereAiPlugsIn },
+              { label: t.common.poLens, to: '/product-owner', hint: t.hints.storiesKpisRisks },
+              { label: t.nav.logic, to: '/product-logic', hint: t.hints.rulesAiRespects },
             ]}
           />
         </div>

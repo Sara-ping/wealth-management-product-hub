@@ -149,46 +149,21 @@ export default function DigitalWealth() {
           ))}
         </div>
 
-        <Reveal delay={120}>
-          <div className="mt-12 rounded-[4px] border border-line bg-white p-6 sm:p-8">
-            <p className="font-mono text-[0.6rem] uppercase tracking-[0.16em] text-gold-600">
-              {copy.metrics.kicker}
-            </p>
-            <h3 className="mt-2 text-xl text-navy-900">{copy.metrics.title}</h3>
-            <ul className="mt-5 grid gap-x-8 gap-y-2.5 sm:grid-cols-2">
-              {copy.metrics.items.map((m) => (
-                <li
-                  key={m.metric}
-                  className="flex items-baseline justify-between gap-4 border-b border-line pb-2.5 text-sm"
-                >
-                  <span className="text-navy-900">{m.metric}</span>
-                  <span className="shrink-0 text-right text-xs leading-relaxed text-muted">
-                    {m.note}
-                  </span>
-                </li>
-              ))}
-            </ul>
-            <p className="mt-5 border-t border-line pt-4 text-xs leading-relaxed text-muted">
-              {copy.metrics.poNote}
-            </p>
-          </div>
-        </Reveal>
-
         <div className="mt-14">
           <ExploreNext
             items={[
               {
-                label: c.navItems[6].label,
+                label: t.nav.cases,
                 to: '/case-studies',
                 hint: copy.buttons.casesHint,
               },
               {
-                label: c.navItems[5].label,
+                label: t.nav.ai,
                 to: '/ai-wealth',
                 hint: copy.buttons.aiHint,
               },
               {
-                label: c.navItems[2].label,
+                label: t.nav.logic,
                 to: '/product-logic',
                 hint: copy.buttons.logicHint,
               },

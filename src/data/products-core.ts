@@ -185,13 +185,6 @@ export const equity: Product = {
         { label: 'Portfolio', detail: 'Position, cost basis and performance reporting' },
       ],
     },
-    {
-      kind: 'callout',
-      tone: 'note',
-      title: 'Educational note',
-      body:
-        'This page describes how equity instruments work and how banks distribute them. It is not a recommendation to buy or sell any security, and no view is expressed on the valuation of any individual company.',
-    },
   ],
 }
 
@@ -437,13 +430,6 @@ export const fixedIncome: Product = {
       caption:
         'The same bond is described by several dimensions at once — for example a 7-year senior unsecured fixed-rate Eurobond from an investment-grade issuer. Product governance applies these dimensions to define the target market and the eligibility rules for each client segment.',
     },
-    {
-      kind: 'callout',
-      tone: 'note',
-      title: 'Educational note',
-      body:
-        'Yield figures on this page are illustrative mechanics, not offers. Actual bond pricing depends on issuer, maturity, currency, credit spread, liquidity and market conditions at the time of execution.',
-    },
   ],
 }
 
@@ -611,13 +597,6 @@ export const funds: Product = {
         },
       ],
     },
-    {
-      kind: 'callout',
-      tone: 'note',
-      title: 'Educational note',
-      body:
-        'Fund risk ratings are standardised labels for comparison, not guarantees. Past performance does not indicate future results and no fund on this site is being recommended.',
-    },
   ],
 }
 
@@ -769,13 +748,6 @@ export const etfs: Product = {
             'Through digital self-directed platforms, advisory shelves with curated lists, and discretionary mandates. Execution-only channels rely on appropriateness tests and clear cost disclosure rather than personalised advice.',
         },
       ],
-    },
-    {
-      kind: 'callout',
-      tone: 'note',
-      title: 'Educational note',
-      body:
-        'ETF examples are used to explain mechanics only. No index, issuer or product is recommended, and “low cost” does not mean “low risk”.',
     },
   ],
 }

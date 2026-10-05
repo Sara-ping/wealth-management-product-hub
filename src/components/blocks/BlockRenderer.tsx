@@ -1,10 +1,7 @@
+import { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import type { Block } from '@/data/types'
-import {
-  Accordion,
-  RateLab,
-  Tabs,
-} from '@/components/ui/interactive'
+import { Accordion, RateLab } from '@/components/ui/interactive'
 import {
   ConceptGrid,
   DataTable,
@@ -324,6 +321,34 @@ export function FrameworkPanel({
   items: { question: string; answer: string }[]
 }) {
   const t = useUI()
+  const [openIndexes, setOpenIndexes] = useState<number[]>([])
+  const listRef = useRef<HTMLOListElement>(null)
+
+  /**
+   * Expanding an answer changes the height of the panel. Without care the
+   * browser re-anchors the scroll position and the page can shoot back toward
+   * the top. We record the clicked row's position before the update and put it
+   * back afterwards, so the row the user just tapped stays exactly where it is.
+   */
+  const toggle = (i: number, trigger: HTMLElement) => {
+    const rowTop = trigger.getBoundingClientRect().top
+    const scrollBefore = window.scrollY
+
+    setOpenIndexes((prev) =>
+      prev.includes(i) ? prev.filter((x) => x !== i) : [...prev, i],
+    )
+
+    // Run after the DOM has been updated in both layout passes.
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        const delta = trigger.getBoundingClientRect().top - rowTop
+        if (Math.abs(delta) > 0.5) {
+          window.scrollTo({ top: scrollBefore + delta, behavior: 'auto' })
+        }
+      })
+    })
+  }
+
   return (
     <Panel className="overflow-hidden p-0">
       <div className="border-b border-line bg-paper px-5 py-4">
@@ -334,19 +359,58 @@ export function FrameworkPanel({
           {t.blocks.frameworkQuestions}
         </h3>
       </div>
-      <Tabs
-        tabs={items.map((item, i) => ({
-          id: `q${i}`,
-          label: item.question.replace('?', ''),
-          content: (
-            <div className="px-5 pb-6">
-              <p className="text-sm leading-relaxed text-ink-soft">
-                {item.answer}
-              </p>
-            </div>
-          ),
-        }))}
-      />
+
+      <ol
+        ref={listRef}
+        className="grid gap-px overflow-anchor-none bg-line sm:grid-cols-2 lg:grid-cols-3"
+      >
+        {items.map((item, i) => {
+          const isOpen = openIndexes.includes(i)
+          const answerId = `framework-answer-${i}`
+          return (
+            <li key={item.question} className="bg-white">
+              <button
+                type="button"
+                onClick={(e) => toggle(i, e.currentTarget)}
+                aria-expanded={isOpen}
+                aria-controls={answerId}
+                className="flex w-full cursor-pointer items-start gap-3 px-5 py-4 text-left transition-colors hover:bg-paper"
+              >
+                <span className="mt-0.5 font-mono text-[0.6rem] text-gold-600">
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+                <span className="flex-1 text-sm leading-relaxed text-navy-900">
+                  {item.question}
+                </span>
+                <span
+                  aria-hidden
+                  className={`mt-0.5 shrink-0 text-[0.65rem] text-gold-600 transition-transform ${
+                    isOpen ? 'rotate-180' : ''
+                  }`}
+                >
+                  ▾
+                </span>
+              </button>
+
+              <div
+                id={answerId}
+                className={`grid transition-all duration-300 ease-out ${
+                  isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
+                }`}
+              >
+                <div className="overflow-hidden">
+                  <div className="px-5 pb-5 pl-11">
+                    <p className="border-l-2 border-gold-500/40 pl-3 text-xs leading-relaxed text-muted">
+                      {item.answer}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </li>
+          )
+        })}
+      </ol>
+
       <div className="border-t border-line px-5 py-4">
         <p className="text-xs leading-relaxed text-muted">{t.blocks.frameworkNote}</p>
       </div>

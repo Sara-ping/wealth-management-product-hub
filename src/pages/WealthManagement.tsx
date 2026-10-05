@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { PageHero, Section } from '@/components/layout/PageShell'
 import { Badge, Reveal, SectionHeading } from '@/components/ui/primitives'
-import { DataTable, ProcessFlow, Timeline } from '@/components/ui/diagrams'
+import { ProcessFlow, Timeline } from '@/components/ui/diagrams'
 import { ExploreNext } from '@/components/blocks/BlockRenderer'
 import { PersonaCard } from '@/components/po/Deliverables'
 import { useContent, useI18n } from '@/i18n/LanguageContext'
@@ -10,7 +10,6 @@ export default function WealthManagement() {
   const c = useContent()
   const t = useI18n().ui
   const copy = c.pages.wealth
-  const segLabels = copy.segmentation.labels
 
   return (
     <>
@@ -76,81 +75,8 @@ export default function WealthManagement() {
         </div>
       </Section>
 
-      {/* ---------------- segmentation ---------------- */}
-      <Section className="border-y border-line bg-paper-2">
-        <div id="segmentation" className="scroll-mt-24">
-          <Reveal>
-            <SectionHeading
-              eyebrow={copy.segmentation.eyebrow}
-              title={copy.segmentation.title}
-              description={copy.segmentation.description}
-            />
-          </Reveal>
-
-          <div className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-            {c.segments.map((s, i) => (
-              <Reveal key={s.name} delay={i * 70} className="h-full">
-                <div className="h-full rounded-[4px] border border-line bg-white p-6">
-                  <div className="flex items-baseline justify-between">
-                    <h3 className="text-lg text-navy-900">{s.name}</h3>
-                    <span className="num text-[0.62rem] text-gold-500">
-                      {String(i + 1).padStart(2, '0')}
-                    </span>
-                  </div>
-                  <p className="mt-2 text-sm leading-relaxed text-muted">
-                    {s.profile}
-                  </p>
-                  <dl className="mt-5 space-y-3 border-t border-line pt-4">
-                    {[
-                      [segLabels[0], s.needs],
-                      [segLabels[1], s.serviceModel],
-                      [segLabels[2], s.advisoryModel],
-                      [segLabels[3], s.productComplexity],
-                      [segLabels[4], s.digitalExperience],
-                    ].map(([label, value]) => (
-                      <div key={label}>
-                        <dt className="font-mono text-[0.58rem] uppercase tracking-[0.14em] text-faint">
-                          {label}
-                        </dt>
-                        <dd className="mt-1 text-sm leading-relaxed text-ink-soft">
-                          {value}
-                        </dd>
-                      </div>
-                    ))}
-                  </dl>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-
-          <Reveal delay={120}>
-            <div className="mt-10">
-              <DataTable
-                columns={[
-                  copy.segmentation.segmentColumn,
-                  segLabels[0],
-                  segLabels[1],
-                  segLabels[2],
-                  segLabels[3],
-                  segLabels[4],
-                ]}
-                rows={c.segments.map((s) => [
-                  s.name,
-                  s.needs,
-                  s.serviceModel,
-                  s.advisoryModel,
-                  s.productComplexity,
-                  s.digitalExperience,
-                ])}
-                caption={copy.segmentation.caption}
-              />
-            </div>
-          </Reveal>
-        </div>
-      </Section>
-
       {/* ---------------- personas ---------------- */}
-      <Section>
+      <Section className="border-y border-line bg-paper-2">
         <div id="personas" className="scroll-mt-24">
           <Reveal>
             <SectionHeading
@@ -207,22 +133,23 @@ export default function WealthManagement() {
           />
         </Reveal>
 
-        <div className="mt-10 grid gap-4 md:grid-cols-2">
-          {c.coreProcesses.map((p, i) => (
-            <Reveal key={p.term} delay={i * 50} className="h-full">
-              <div className="h-full rounded-[4px] border border-line bg-white p-6">
-                <div className="flex items-center justify-between gap-3">
-                  <h3 className="text-lg text-navy-900">{p.term}</h3>
+        {/* Compact process list: the definition stays, the essay goes. */}
+        <div className="mt-10 space-y-px overflow-hidden rounded-[4px] border border-line bg-line">
+          {c.coreProcesses.map((p) => (
+            <Reveal key={p.term}>
+              <div className="grid gap-2 bg-white px-5 py-4 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-8">
+                <div className="flex items-center gap-3">
+                  <h3 className="text-base text-navy-900">{p.term}</h3>
                   {p.tag ? <Badge tone="navy">{p.tag}</Badge> : null}
                 </div>
-                <p className="mt-3 text-sm leading-relaxed text-muted">
-                  {p.definition}
-                </p>
-                <div className="mt-5 border-t border-line pt-4">
-                  <p className="font-mono text-[0.58rem] uppercase tracking-[0.14em] text-gold-600">
-                    {copy.processes.noteLabel}
+                <div>
+                  <p className="text-sm leading-relaxed text-ink-soft">
+                    {p.definition}
                   </p>
-                  <p className="mt-2 text-sm leading-relaxed text-ink-soft">
+                  <p className="mt-2 text-xs leading-relaxed text-muted">
+                    <span className="font-mono text-[0.56rem] uppercase tracking-[0.14em] text-gold-600">
+                      {copy.processes.noteLabel} ·{' '}
+                    </span>
                     {p.baAngle}
                   </p>
                 </div>
@@ -252,7 +179,7 @@ export default function WealthManagement() {
           <ExploreNext
             items={[
               {
-                label: c.navItems[4].label,
+                label: t.nav.digital,
                 to: '/digital-wealth',
                 hint: copy.buttons.digitalHint,
               },
@@ -262,12 +189,12 @@ export default function WealthManagement() {
                 hint: copy.buttons.poHint,
               },
               {
-                label: c.navItems[6].label,
+                label: t.nav.cases,
                 to: '/case-studies',
                 hint: copy.buttons.casesHint,
               },
               {
-                label: c.navItems[5].label,
+                label: t.nav.ai,
                 to: '/ai-wealth',
                 hint: copy.buttons.aiHint,
               },

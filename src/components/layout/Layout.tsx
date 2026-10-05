@@ -31,7 +31,7 @@ export function Layout() {
   const searchIndex = useMemo<SearchEntry[]>(() => {
     const entries: SearchEntry[] = []
 
-    c.navItems.forEach((n) =>
+    c.headerNavItems.forEach((n) =>
       entries.push({ title: n.label, type: 'Page', to: n.to, keywords: '' }),
     )
     entries.push({

@@ -183,6 +183,11 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+
+  /* Keep the browser from re-anchoring scroll when a panel resizes. */
+  .overflow-anchor-none {
+    overflow-anchor: none;
+  }
 }
 
 /* Scroll reveal */

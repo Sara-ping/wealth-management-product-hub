@@ -1,6 +1,143 @@
-import { Fragment, type ReactNode } from 'react'
+import {
+  Fragment,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type ReactNode,
+} from 'react'
 import { Badge, type Tone } from './primitives'
 import { useContent, useUI } from '@/i18n/LanguageContext'
+
+/* ------------------------------------------------------------------ */
+/* Horizontal scrollbar                                                */
+/* ------------------------------------------------------------------ */
+
+/**
+ * An always-visible custom scrollbar for a horizontally scrolling strip.
+ *
+ * Native scrollbars are hidden on macOS / touch devices until you scroll,
+ * and `scrollbar-width` styling cannot force them to paint. This renders its
+ * own track and thumb so the affordance is always discoverable, and keeps
+ * them in sync with the element's real scroll position.
+ */
+export function useCustomScrollbar<T extends HTMLElement>() {
+  const ref = useRef<T>(null)
+  const [ratio, setRatio] = useState(1)
+  const [offset, setOffset] = useState(0)
+
+  const measure = useCallback(() => {
+    const el = ref.current
+    if (!el) return
+    const max = el.scrollWidth - el.clientWidth
+    setRatio(el.scrollWidth > 0 ? el.clientWidth / el.scrollWidth : 1)
+    setOffset(max > 0 ? el.scrollLeft / max : 0)
+  }, [])
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    measure()
+    el.addEventListener('scroll', measure, { passive: true })
+    const ro = new ResizeObserver(measure)
+    ro.observe(el)
+    return () => {
+      el.removeEventListener('scroll', measure)
+      ro.disconnect()
+    }
+  }, [measure])
+
+  const scrollToRatio = useCallback((r: number) => {
+    const el = ref.current
+    if (!el) return
+    const max = el.scrollWidth - el.clientWidth
+    el.scrollLeft = Math.max(0, Math.min(1, r)) * max
+  }, [])
+
+  return { ref, ratio, offset, scrollToRatio, overflowing: ratio < 1 }
+}
+
+export function ScrollbarTrack({
+  ratio,
+  offset,
+  onSeek,
+  dark = false,
+}: {
+  ratio: number
+  offset: number
+  onSeek: (ratio: number) => void
+  dark?: boolean
+}) {
+  const trackRef = useRef<HTMLDivElement>(null)
+  const dragging = useRef(false)
+
+  const seekFromEvent = (clientX: number) => {
+    const track = trackRef.current
+    if (!track) return
+    const r = track.getBoundingClientRect()
+    if (r.width <= 0) return
+    const travel = 1 - ratio
+    if (travel <= 0) return
+    // Centre the thumb on the pointer, then map back to a scroll ratio.
+    const thumbW = ratio * r.width
+    const pos = clientX - r.left - thumbW / 2
+    onSeek(pos / (r.width - thumbW))
+  }
+
+  useEffect(() => {
+    const onMove = (e: PointerEvent) => {
+      if (!dragging.current) return
+      seekFromEvent(e.clientX)
+    }
+    const onUp = () => {
+      dragging.current = false
+    }
+    window.addEventListener('pointermove', onMove)
+    window.addEventListener('pointerup', onUp)
+    return () => {
+      window.removeEventListener('pointermove', onMove)
+      window.removeEventListener('pointerup', onUp)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ratio, onSeek])
+
+  const thumbPct = Math.max(ratio * 100, 8)
+
+  return (
+    <div
+      ref={trackRef}
+      role="scrollbar"
+      aria-orientation="horizontal"
+      aria-valuenow={Math.round(offset * 100)}
+      aria-valuemin={0}
+      aria-valuemax={100}
+      onPointerDown={(e) => {
+        // Keep focus off the track: focusing a deep element makes the browser
+        // scroll it into view, which reads as the page jumping.
+        e.preventDefault()
+        dragging.current = true
+        seekFromEvent(e.clientX)
+      }}
+      className={`group relative mt-3 h-2 w-full cursor-pointer rounded-full transition-colors ${
+        dark
+          ? 'bg-white/12 hover:bg-white/18'
+          : 'bg-navy-900/[0.08] hover:bg-navy-900/[0.13]'
+      }`}
+    >
+      <div
+        className={`absolute inset-y-0 rounded-full transition-colors ${
+          dark
+            ? 'bg-gold-400 group-hover:bg-gold-300'
+            : 'bg-gold-500 group-hover:bg-gold-600'
+        }`}
+        style={{
+          width: `${thumbPct}%`,
+          left: `${offset * (100 - thumbPct)}%`,
+        }}
+      />
+    </div>
+  )
+}
 
 /* ------------------------------------------------------------------ */
 /* Horizontal process flow: A → B → C                                  */
@@ -23,56 +160,71 @@ export function ProcessFlow({
   const items: FlowStep[] = steps.map((s) =>
     typeof s === 'string' ? { label: s } : s,
   )
+  const sb = useCustomScrollbar<HTMLOListElement>()
 
   return (
-    <ol className="flex flex-col md:flex-row md:flex-nowrap md:overflow-x-auto no-scrollbar md:pb-1">
-      {items.map((step, i) => (
-        <Fragment key={`${step.label}-${i}`}>
-          <li className="min-w-0 flex-1 md:min-w-[8.5rem]">
-            <div
-              className={`h-full rounded-[4px] border px-3.5 ${
-                size === 'sm' ? 'py-2.5' : 'py-4'
-              } ${
-                dark
-                  ? 'border-white/15 bg-white/[0.04]'
-                  : 'border-line bg-white shadow-[0_1px_2px_rgba(10,30,60,0.04)]'
-              }`}
-            >
-              <p className="num text-[0.65rem] tracking-[0.14em] text-gold-500">
-                {String(i + 1).padStart(2, '0')}
-              </p>
-              <p
-                className={`mt-1.5 ${
-                  size === 'sm' ? 'text-[0.8rem]' : 'text-sm'
-                } font-medium leading-snug ${
-                  dark ? 'text-white' : 'text-navy-900'
+    <div>
+      <ol
+        ref={sb.ref}
+        className="flex flex-col md:flex-row md:flex-nowrap md:overflow-x-auto no-scrollbar md:pb-1"
+      >
+        {items.map((step, i) => (
+          <Fragment key={`${step.label}-${i}`}>
+            <li className="min-w-0 flex-1 md:min-w-[8.5rem]">
+              <div
+                className={`h-full rounded-[4px] border px-3.5 ${
+                  size === 'sm' ? 'py-2.5' : 'py-4'
+                } ${
+                  dark
+                    ? 'border-white/15 bg-white/[0.04]'
+                    : 'border-line bg-white shadow-[0_1px_2px_rgba(10,30,60,0.04)]'
                 }`}
               >
-                {step.label}
-              </p>
-              {step.detail ? (
+                <p className="num text-[0.65rem] tracking-[0.14em] text-gold-500">
+                  {String(i + 1).padStart(2, '0')}
+                </p>
                 <p
-                  className={`mt-1.5 text-xs leading-relaxed ${
-                    dark ? 'text-white/55' : 'text-muted'
+                  className={`mt-1.5 ${
+                    size === 'sm' ? 'text-[0.8rem]' : 'text-sm'
+                  } font-medium leading-snug ${
+                    dark ? 'text-white' : 'text-navy-900'
                   }`}
                 >
-                  {step.detail}
+                  {step.label}
                 </p>
-              ) : null}
-            </div>
-          </li>
-          {i < items.length - 1 ? (
-            <li
-              aria-hidden
-              className="flex shrink-0 items-center justify-center py-1.5 text-gold-500 md:px-2 md:py-0"
-            >
-              <span className="text-sm leading-none md:hidden">↓</span>
-              <span className="hidden text-sm leading-none md:inline">→</span>
+                {step.detail ? (
+                  <p
+                    className={`mt-1.5 text-xs leading-relaxed ${
+                      dark ? 'text-white/55' : 'text-muted'
+                    }`}
+                  >
+                    {step.detail}
+                  </p>
+                ) : null}
+              </div>
             </li>
-          ) : null}
-        </Fragment>
-      ))}
-    </ol>
+            {i < items.length - 1 ? (
+              <li
+                aria-hidden
+                className="flex shrink-0 items-center justify-center py-1.5 text-gold-500 md:px-2 md:py-0"
+              >
+                <span className="text-sm leading-none md:hidden">↓</span>
+                <span className="hidden text-sm leading-none md:inline">→</span>
+              </li>
+            ) : null}
+          </Fragment>
+        ))}
+      </ol>
+
+      {sb.overflowing ? (
+        <ScrollbarTrack
+          ratio={sb.ratio}
+          offset={sb.offset}
+          onSeek={sb.scrollToRatio}
+          dark={dark}
+        />
+      ) : null}
+    </div>
   )
 }
 

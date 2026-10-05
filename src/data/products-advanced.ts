@@ -252,13 +252,6 @@ export const structuredProducts: Product = {
       ],
     },
     {
-      kind: 'callout',
-      tone: 'warning',
-      title: 'Educational purpose only',
-      body:
-        'All diagrams and examples on this page are simplified, educational illustrations. They are not investment recommendations, do not represent any actual product offered by any bank, and do not describe a view on any underlying asset.',
-    },
-    {
       kind: 'perspective',
       title: 'Wealth Management Perspective',
       items: [
@@ -527,13 +520,6 @@ export const otcDerivatives: Product = {
         },
       ],
     },
-    {
-      kind: 'callout',
-      tone: 'warning',
-      title: 'Educational purpose only',
-      body:
-        'Derivatives can create losses greater than the amount invested in some structures. Examples here describe mechanics and business logic only — they are not recommendations and not offers.',
-    },
   ],
 }
 
@@ -697,13 +683,6 @@ export const insurance: Product = {
             'Bancassurance: through RMs and licensed specialists, with a documented demand-and-needs assessment, insurer product governance, and post-sale servicing handled by the insurer with bank oversight.',
         },
       ],
-    },
-    {
-      kind: 'callout',
-      tone: 'note',
-      title: 'Educational note',
-      body:
-        'This page explains how insurance products fit into a wealth plan. Coverage, exclusions and taxation are jurisdiction-specific and depend on the individual policy wording.',
     },
   ],
 }

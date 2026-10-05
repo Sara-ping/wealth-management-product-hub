@@ -243,13 +243,6 @@ export const structuredProducts: Product = {
       ],
     },
     {
-      kind: 'callout',
-      tone: 'warning',
-      title: '仅用于教育目的',
-      body:
-        '本页所有图表与示例均为简化后的教学演示，不构成投资建议，不代表任何银行实际提供的产品，也不表达对任何标的资产的看法。',
-    },
-    {
       kind: 'perspective',
       title: '财富管理视角',
       items: [
@@ -513,13 +506,6 @@ export const otcDerivatives: Product = {
         },
       ],
     },
-    {
-      kind: 'callout',
-      tone: 'warning',
-      title: '仅用于教育目的',
-      body:
-        '在某些结构下，衍生品造成的亏损可能超过投入的资金。此处示例仅说明机制与业务逻辑，不构成建议，也不构成要约。',
-    },
   ],
 }
 
@@ -680,13 +666,6 @@ export const insurance: Product = {
             '通过银保渠道：由客户经理与持牌专员在留痕的需求与需要评估下销售；保险公司负责产品治理与售后，银行承担监督职责。',
         },
       ],
-    },
-    {
-      kind: 'callout',
-      tone: 'note',
-      title: '教育性说明',
-      body:
-        '本页说明保险产品如何嵌入财富规划。保障范围、除外责任与税务处理因司法辖区而异，并取决于具体保单条款。',
     },
   ],
 }

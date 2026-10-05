@@ -142,7 +142,7 @@ export const coreProcesses: {
 export const solutionFamilies = [
   {
     title: 'Investment Products',
-    to: '/products',
+    to: '/',
     body: 'Equity, fixed income, funds, ETFs, structured products and derivatives — each with its own risk, liquidity and governance profile.',
   },
   {

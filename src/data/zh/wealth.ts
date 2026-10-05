@@ -156,7 +156,7 @@ export const valueChain = [
 export const solutionFamilies = [
   {
     title: '投资产品',
-    to: '/products',
+    to: '/',
     body: '股票、固定收益、基金、ETF、结构化产品与衍生品 —— 各有其风险、流动性与治理特征。',
   },
   {

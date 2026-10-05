@@ -117,14 +117,23 @@ export default function About() {
                 <p className="font-mono text-[0.6rem] uppercase tracking-[0.16em] text-faint">
                   {copy.skillsLabel}
                 </p>
-                <div className="mt-4 flex flex-wrap gap-2">
-                  {about.skills.map((skill) => (
-                    <span
-                      key={skill}
-                      className="rounded-[3px] border border-line bg-white px-3 py-1.5 text-xs text-ink-soft transition-colors hover:border-gold-500/50 hover:text-navy-900"
-                    >
-                      {skill}
-                    </span>
+                <div className="mt-4 space-y-5">
+                  {about.skillGroups.map((group) => (
+                    <div key={group.title}>
+                      <p className="font-mono text-[0.58rem] uppercase tracking-[0.14em] text-gold-600">
+                        {group.title}
+                      </p>
+                      <div className="mt-2.5 flex flex-wrap gap-2">
+                        {group.items.map((skill) => (
+                          <span
+                            key={skill}
+                            className="rounded-[3px] border border-line bg-white px-3 py-1.5 text-xs text-ink-soft transition-colors hover:border-gold-500/50 hover:text-navy-900"
+                          >
+                            {skill}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
                   ))}
                 </div>
               </div>
@@ -178,15 +187,7 @@ export default function About() {
           title={copy.groups.learning.title}
           description={copy.groups.learning.description}
           tone="gold"
-          groups={about.selfDirectedLearning}
-        />
-
-        <GroupSection
-          eyebrow={copy.groups.projects.eyebrow}
-          title={copy.groups.projects.title}
-          description={copy.groups.projects.description}
-          tone="teal"
-          groups={about.personalProjects}
+          groups={about.learningAndProjects}
         />
 
         <Reveal>
@@ -200,10 +201,10 @@ export default function About() {
         <div className="mt-12">
           <ExploreNext
             items={[
-              { label: c.navItems[6].label, to: '/case-studies', hint: 'Product thinking applied' },
-              { label: c.navItems[4].label, to: '/digital-wealth', hint: 'Journey & requirements' },
-              { label: t.nav.products, to: '/products', hint: 'Product knowledge' },
-              { label: c.navItems[5].label, to: '/ai-wealth', hint: 'AI & RAG concepts' },
+              { label: t.nav.cases, to: '/case-studies', hint: t.hints.productThinkingApplied },
+              { label: t.nav.digital, to: '/digital-wealth', hint: t.hints.journeyRequirements },
+              { label: t.nav.products, to: '/', hint: t.hints.productKnowledge },
+              { label: t.nav.ai, to: '/ai-wealth', hint: t.hints.aiConcepts },
             ]}
           />
         </div>

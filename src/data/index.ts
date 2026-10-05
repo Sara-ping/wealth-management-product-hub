@@ -30,14 +30,10 @@ import * as enPages from './pages'
 import * as zhPages from './zh/pages'
 
 const en = {
-  navItems: enSite.navItems,
+  headerNavItems: enSite.headerNavItems,
   ctaRoute: enSite.ctaRoute,
-  productMap: enSite.productMap,
-  fromProductToExperience: enSite.fromProductToExperience,
-  layers: enSite.layers,
-  home: enSite.home,
-  exploreCards: enSite.exploreCards,
   about: enSite.about,
+  home: enSite.home,
 
   products: enProducts.products,
   productNavItems: enProducts.productNavItems,
@@ -79,8 +75,7 @@ const en = {
   kpiFramework: enPo.kpiFramework,
   riskRegister: enPo.riskRegister,
   releasePlan: enPo.releasePlan,
-  deliveryHygiene: enPo.deliveryHygiene,
-  stakeholderMap: enPo.stakeholderMap,
+
   lifecycleArtefacts: enPo.lifecycleArtefacts,
   systemTouchpoints: enPo.systemTouchpoints,
 
@@ -88,14 +83,10 @@ const en = {
 }
 
 const zh = {
-  navItems: zhSite.navItems,
+  headerNavItems: zhSite.headerNavItems,
   ctaRoute: zhSite.ctaRoute,
-  productMap: zhSite.productMap,
-  fromProductToExperience: zhSite.fromProductToExperience,
-  layers: zhSite.layers,
-  home: zhSite.home,
-  exploreCards: zhSite.exploreCards,
   about: zhSite.about,
+  home: zhSite.home,
 
   products: zhProducts.products,
   productNavItems: zhProducts.productNavItems,
@@ -137,8 +128,7 @@ const zh = {
   kpiFramework: zhPo.kpiFramework,
   riskRegister: zhPo.riskRegister,
   releasePlan: zhPo.releasePlan,
-  deliveryHygiene: zhPo.deliveryHygiene,
-  stakeholderMap: zhPo.stakeholderMap,
+
   lifecycleArtefacts: zhPo.lifecycleArtefacts,
   systemTouchpoints: zhPo.systemTouchpoints,
 

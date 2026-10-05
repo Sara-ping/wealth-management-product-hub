@@ -37,11 +37,13 @@ export function Navbar({ searchIndex }: { searchIndex: SearchEntry[] }) {
   const [open, setOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const [menuOpen, setMenuOpen] = useState<string | null>(null)
   const location = useLocation()
   const navigate = useNavigate()
   const c = useContent()
   const t = useI18n().ui
   const [lang, setLang] = useLang()
+  const navGroups = c.headerNavItems
 
   useEffect(() => {
     setOpen(false)
@@ -81,36 +83,116 @@ export function Navbar({ searchIndex }: { searchIndex: SearchEntry[] }) {
             </span>
             <span className="hidden min-w-0 flex-col leading-tight 2xl:flex">
               <span className="truncate font-serif text-[0.9rem] text-navy-900">
-                {lang === 'zh' ? '财富管理产品中心' : 'Wealth Management Product Hub'}
+                {t.common.siteName}
               </span>
               <span className="truncate font-mono text-[0.55rem] uppercase tracking-[0.16em] text-faint">
-                {lang === 'zh' ? '产品 · 流程 · 数字化' : 'Products · Processes · Digital'}
+                {t.common.siteTagline}
               </span>
             </span>
           </Link>
 
           <nav className="hidden min-w-0 flex-1 items-center justify-center gap-0.5 xl:flex">
-            {c.navItems.map((item) => (
-              <NavLink
-                key={item.to}
-                to={item.to}
-                end={item.to === '/'}
-                className={({ isActive }) =>
-                  `relative whitespace-nowrap px-2 py-2 text-[0.78rem] transition-colors ${
-                    isActive ? 'text-navy-900' : 'text-muted hover:text-navy-900'
-                  }`
-                }
-              >
-                {({ isActive }) => (
-                  <>
-                    {item.label}
-                    {isActive ? (
-                      <span className="absolute inset-x-2 -bottom-[1px] h-[2px] bg-gold-500" />
-                    ) : null}
-                  </>
-                )}
-              </NavLink>
-            ))}
+            {navGroups.map((group) => {
+              // Only groups that declare a menu render a dropdown. The flat
+              // five-item navigation leaves this undefined.
+              const entries = group.menu ?? []
+              const hasMenu = entries.length > 0
+
+              return hasMenu ? (
+                <div
+                  key={group.label}
+                  className="group relative"
+                  onMouseEnter={() => setMenuOpen(group.label)}
+                  onMouseLeave={() => setMenuOpen(null)}
+                >
+                  <NavLink
+                    to={group.to}
+                    end={group.end}
+                    className={({ isActive }) =>
+                      `relative flex items-center gap-1 whitespace-nowrap px-2 py-2 text-[0.78rem] transition-colors ${
+                        isActive || menuOpen === group.label
+                          ? 'font-medium text-gold-600'
+                          : 'text-muted hover:text-navy-900'
+                      }`
+                    }
+                  >
+                    {({ isActive }) => (
+                      <>
+                        {group.label}
+                        <span
+                          aria-hidden
+                          className={`text-[0.55rem] transition-transform ${
+                            menuOpen === group.label ? 'rotate-180' : ''
+                          }`}
+                        >
+                          ▾
+                        </span>
+                        {isActive ? (
+                          <span className="absolute inset-x-2 -bottom-[1px] h-[2px] bg-gold-500" />
+                        ) : null}
+                      </>
+                    )}
+                  </NavLink>
+
+                  <div
+                    className={`absolute left-0 top-full z-50 w-64 pt-2 transition-opacity ${
+                      menuOpen === group.label
+                        ? 'visible opacity-100'
+                        : 'invisible opacity-0'
+                    }`}
+                  >
+                    <ul className="overflow-hidden rounded-[4px] border border-line bg-white py-1.5 shadow-[0_12px_32px_rgba(10,30,60,0.12)]">
+                      {group.menuLabel ? (
+                        <li>
+                          <p className="px-4 pb-1.5 pt-2 font-mono text-[0.55rem] uppercase tracking-[0.14em] text-faint">
+                            {group.menuLabel}
+                          </p>
+                        </li>
+                      ) : null}
+                      {entries.map((entry) => (
+                        <li key={entry.to}>
+                          <NavLink
+                            to={entry.to}
+                            onClick={() => setMenuOpen(null)}
+                            className={({ isActive }) =>
+                              `block px-4 py-2 text-[0.78rem] transition-colors ${
+                                isActive
+                                  ? 'bg-paper text-gold-600'
+                                  : 'text-ink-soft hover:bg-paper hover:text-navy-900'
+                              }`
+                            }
+                          >
+                            {entry.label}
+                          </NavLink>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              ) : (
+                <NavLink
+                  key={group.label}
+                  to={group.to}
+                  end={group.end}
+                  className={({ isActive }) =>
+                    `relative whitespace-nowrap px-2 py-2 text-[0.78rem] transition-colors ${
+                      isActive
+                        ? 'font-medium text-gold-600'
+                        : 'text-muted hover:text-navy-900'
+                    }`
+                  }
+                >
+                  {({ isActive }) => (
+                    <>
+                      {group.label}
+                      {isActive ? (
+                        <span className="absolute inset-x-2 -bottom-[1px] h-[2px] bg-gold-500" />
+                      ) : null}
+                    </>
+                  )}
+                </NavLink>
+              )
+            })}
           </nav>
 
           <div className="ml-auto flex shrink-0 items-center gap-2">
@@ -162,26 +244,68 @@ export function Navbar({ searchIndex }: { searchIndex: SearchEntry[] }) {
         {open ? (
           <div className="border-t border-line bg-white xl:hidden">
             <nav className="shell flex flex-col py-2">
-              {c.navItems.map((item) => (
-                <NavLink
-                  key={item.to}
-                  to={item.to}
-                  end={item.to === '/'}
-                  className={({ isActive }) =>
-                    `border-b border-line px-1 py-3 text-sm last:border-0 ${
-                      isActive ? 'text-navy-900' : 'text-muted'
-                    }`
-                  }
-                >
-                  {item.label}
-                </NavLink>
-              ))}
-              <Link
-                to="/product-owner"
-                className="border-b border-line px-1 py-3 text-sm text-muted"
-              >
-                {t.common.poLens}
-              </Link>
+              {navGroups.map((group) => {
+                const entries = group.menu ?? []
+
+                if (entries.length === 0) {
+                  return (
+                    <NavLink
+                      key={group.label}
+                      to={group.to}
+                      end={group.end}
+                      onClick={() => setOpen(false)}
+                      className={({ isActive }) =>
+                        `border-b border-line px-1 py-3 text-sm ${
+                          isActive ? 'font-medium text-gold-600' : 'text-muted'
+                        }`
+                      }
+                    >
+                      {group.label}
+                    </NavLink>
+                  )
+                }
+
+                return (
+                  <div key={group.label} className="border-b border-line">
+                    <NavLink
+                      to={group.to}
+                      end={group.end}
+                      onClick={() => setOpen(false)}
+                      className={({ isActive }) =>
+                        `block px-1 py-3 text-sm ${
+                          isActive ? 'font-medium text-gold-600' : 'text-muted'
+                        }`
+                      }
+                    >
+                      {group.label}
+                    </NavLink>
+                    {group.menuLabel ? (
+                      <p className="ml-3 font-mono text-[0.55rem] uppercase tracking-[0.14em] text-faint">
+                        {group.menuLabel}
+                      </p>
+                    ) : null}
+                    <ul className="mb-2 ml-3 border-l border-line pl-3">
+                      {entries.map((entry) => (
+                        <li key={entry.to}>
+                          <NavLink
+                            to={entry.to}
+                            onClick={() => setOpen(false)}
+                            className={({ isActive }) =>
+                              `block py-2 text-[0.8rem] ${
+                                isActive
+                                  ? 'text-gold-600'
+                                  : 'text-muted hover:text-navy-900'
+                              }`
+                            }
+                          >
+                            {entry.label}
+                          </NavLink>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )
+              })}
               <button
                 type="button"
                 onClick={() => setSearchOpen(true)}

@@ -7,7 +7,6 @@ import { ExploreNext } from '@/components/blocks/BlockRenderer'
 import {
   ApiContractBlock,
   CaseRiskTable,
-  KpiTable,
   UserStoryCard,
 } from '@/components/po/Deliverables'
 import { useContent, useI18n } from '@/i18n/LanguageContext'
@@ -40,6 +39,27 @@ function CaseBlock({
         <div className="ml-[6px] h-6 border-l border-dashed border-line-strong sm:ml-[94px]" />
       ) : null}
     </div>
+  )
+}
+
+/**
+ * Business rules rendered as scannable condition → outcome rows.
+ *
+ * Rules are stored as single sentences; most already read as "X must be true
+ * before Y", so they are presented as a constraint list rather than prose.
+ */
+function RuleList({ items }: { items: string[] }) {
+  return (
+    <ol className="space-y-px overflow-hidden rounded-[3px] border border-line bg-line">
+      {items.map((item, i) => (
+        <li key={item} className="flex gap-3 bg-white px-4 py-3">
+          <span className="mt-0.5 shrink-0 font-mono text-[0.58rem] text-gold-600">
+            R{String(i + 1).padStart(2, '0')}
+          </span>
+          <span className="text-sm leading-relaxed text-ink-soft">{item}</span>
+        </li>
+      ))}
+    </ol>
   )
 }
 
@@ -147,19 +167,6 @@ function PoLens({ po }: { po: CaseStudy['po'] }) {
           />
         </div>
       </div>
-
-      <div className="border-t border-line bg-white px-6 py-6">
-        <p className="font-mono text-[0.58rem] uppercase tracking-[0.14em] text-faint">
-          {L.metrics}
-        </p>
-        <div className="mt-3 flex flex-wrap gap-2">
-          {po.metrics.map((m) => (
-            <Badge key={m} tone="navy">
-              {m}
-            </Badge>
-          ))}
-        </div>
-      </div>
     </div>
   )
 }
@@ -169,9 +176,9 @@ function PoLens({ po }: { po: CaseStudy['po'] }) {
 /* ------------------------------------------------------------------ */
 
 function CaseStudySection({ study }: { study: CaseStudy }) {
-  const c = useContent()
   const t = useI18n().ui
   const L = t.cases.labels
+  const c = useContent()
   const artifacts = c.casePo[study.slug]
 
   return (
@@ -186,7 +193,10 @@ function CaseStudySection({ study }: { study: CaseStudy }) {
               {study.title}
             </h2>
           </div>
-          <Badge tone="teal">{t.common.caseStudy}</Badge>
+          <div className="flex flex-wrap items-center gap-2">
+            <Badge tone="teal">{t.common.caseStudy}</Badge>
+            <Badge tone="navy">{t.common.illustrative}</Badge>
+          </div>
         </div>
         <p className="mt-5 max-w-3xl text-[0.95rem] leading-relaxed text-ink-soft">
           {study.summary}
@@ -211,7 +221,7 @@ function CaseStudySection({ study }: { study: CaseStudy }) {
         </CaseBlock>
 
         <CaseBlock label={L.businessRules}>
-          <List items={study.businessRules} />
+          <RuleList items={study.businessRules} />
         </CaseBlock>
 
         <CaseBlock label={L.userJourney}>
@@ -229,7 +239,7 @@ function CaseStudySection({ study }: { study: CaseStudy }) {
           <List items={study.data} />
         </CaseBlock>
 
-        <CaseBlock label={L.api}>
+        <CaseBlock label={L.api} last>
           <div className="overflow-hidden rounded-[3px] border border-line bg-navy-950">
             <ul className="divide-y divide-white/10">
               {study.api.map((a) => (
@@ -243,21 +253,11 @@ function CaseStudySection({ study }: { study: CaseStudy }) {
             </ul>
           </div>
         </CaseBlock>
-
-        <CaseBlock label={L.riskCompliance}>
-          <List items={study.riskCompliance} />
-        </CaseBlock>
-
-        <CaseBlock label={L.successMetrics} last>
-          <DataTable
-            columns={t.cases.metricsColumns}
-            rows={study.successMetrics.map((m) => [m.metric, m.description])}
-          />
-        </CaseBlock>
       </div>
 
-      <PoLens po={study.po} />
-
+      {/* Requirements evidence: user stories, acceptance criteria, the API
+          contract and the risk register come before the PO framing so a
+          reviewer meets the strongest artefacts first. */}
       {artifacts ? (
         <div className="mt-12">
           <Reveal>
@@ -287,23 +287,6 @@ function CaseStudySection({ study }: { study: CaseStudy }) {
 
           <Reveal>
             <div className="mt-8">
-              <p className="mb-3 font-mono text-[0.58rem] uppercase tracking-[0.14em] text-faint">
-                {t.cases.kpiNote}
-              </p>
-              <KpiTable
-                columns={t.common.kpiColumns}
-                rows={artifacts.kpis.map((k) => [
-                  k.metric,
-                  k.baseline,
-                  k.target,
-                  k.guardrail,
-                ])}
-              />
-            </div>
-          </Reveal>
-
-          <Reveal>
-            <div className="mt-8">
               <ApiContractBlock
                 title={artifacts.contract.title}
                 endpoint={artifacts.contract.endpoint}
@@ -324,6 +307,8 @@ function CaseStudySection({ study }: { study: CaseStudy }) {
           </Reveal>
         </div>
       ) : null}
+
+      <PoLens po={study.po} />
     </div>
   )
 }
@@ -363,9 +348,64 @@ export default function CaseStudies() {
             <Reveal key={study.slug} delay={i * 60} className="h-full">
               <Link
                 to={`/case-studies#${study.slug}`}
+                className={`group flex h-full flex-col rounded-[4px] border bg-white p-6 transition-all duration-300 hover:-translate-y-0.5 hover:border-gold-500/45 hover:shadow-[0_18px_40px_-28px_rgba(10,30,60,0.45)] ${
+                  i < 2 ? 'border-navy-900/25' : 'border-line'
+                }`}
+              >
+                <div className="flex items-center justify-between gap-3">
+                  <p className="font-mono text-[0.6rem] uppercase tracking-[0.16em] text-gold-600">
+                    {study.kicker}
+                  </p>
+                  {i < 2 ? (
+                    <span className="rounded-[3px] border border-gold-500/40 bg-gold-500/10 px-2 py-0.5 font-mono text-[0.52rem] uppercase tracking-[0.14em] text-gold-600">
+                      {t.cases.flagship}
+                    </span>
+                  ) : null}
+                  <span className="text-gold-500 transition-transform group-hover:translate-x-0.5">
+                    →
+                  </span>
+                </div>
+                <h3 className="mt-3 text-lg text-navy-900">{study.title}</h3>
+                <p className="mt-3 flex-1 text-sm leading-relaxed text-muted">
+                  {study.summary}
+                </p>
+                <p className="mt-5 border-t border-line pt-4 font-mono text-[0.6rem] uppercase tracking-[0.12em] text-faint">
+                  {study.domain}
+                </p>
+              </Link>
+            </Reveal>
+          ))}
+        </div>
+      </Section>
+
+      {/* Flagship cases: the two that carry the strongest evidence. */}
+      {c.caseStudies.slice(0, 2).map((study, i) => (
+        <Section
+          key={study.slug}
+          className={i % 2 === 1 ? 'border-y border-line bg-paper-2' : ''}
+        >
+          <CaseStudySection study={study} />
+        </Section>
+      ))}
+
+      {/* Supporting cases: heading and link, not four equal weight. */}
+      <Section className="border-y border-line bg-paper-2">
+        <Reveal>
+          <SectionHeading
+            eyebrow={copy.more.eyebrow}
+            title={copy.more.title}
+            description={copy.more.description}
+          />
+        </Reveal>
+
+        <div className="mt-8 grid gap-4 sm:grid-cols-2">
+          {c.caseStudies.slice(2).map((study, i) => (
+            <Reveal key={study.slug} delay={i * 60} className="h-full">
+              <Link
+                to={`/case-studies#${study.slug}`}
                 className="group flex h-full flex-col rounded-[4px] border border-line bg-white p-6 transition-all duration-300 hover:-translate-y-0.5 hover:border-gold-500/45 hover:shadow-[0_18px_40px_-28px_rgba(10,30,60,0.45)]"
               >
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between gap-3">
                   <p className="font-mono text-[0.6rem] uppercase tracking-[0.16em] text-gold-600">
                     {study.kicker}
                   </p>
@@ -386,11 +426,8 @@ export default function CaseStudies() {
         </div>
       </Section>
 
-      {c.caseStudies.map((study, i) => (
-        <Section
-          key={study.slug}
-          className={i % 2 === 1 ? 'border-y border-line bg-paper-2' : ''}
-        >
+      {c.caseStudies.slice(2).map((study) => (
+        <Section key={study.slug}>
           <CaseStudySection study={study} />
         </Section>
       ))}
@@ -411,10 +448,10 @@ export default function CaseStudies() {
         <div className="mt-10">
           <ExploreNext
             items={[
-              { label: c.navItems[4].label, to: '/digital-wealth', hint: 'Stage-level detail' },
-              { label: t.common.poLens, to: '/product-owner', hint: 'Frameworks & artefacts' },
-              { label: t.nav.products, to: '/products', hint: 'Product context' },
-              { label: c.navItems[7].label, to: '/about', hint: 'How I work' },
+              { label: t.nav.digital, to: '/digital-wealth', hint: t.hints.stageLevelDetail },
+              { label: t.common.poLens, to: '/product-owner', hint: t.hints.frameworksArtefacts },
+              { label: t.nav.products, to: '/', hint: t.hints.productContext },
+              { label: t.nav.about, to: '/about', hint: t.hints.howIWork },
             ]}
           />
         </div>

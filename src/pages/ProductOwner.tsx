@@ -6,7 +6,6 @@ import { ExploreNext } from '@/components/blocks/BlockRenderer'
 import {
   ApiContractBlock,
   DecisionFrameworkCard,
-  DeliveryPanel,
   JourneyMapTable,
   KpiTable,
   RiskRegisterTable,
@@ -37,8 +36,64 @@ export default function ProductOwner() {
         }
       />
 
-      {/* ---------------- decision frameworks ---------------- */}
+      {/* ---------------- six-step method ---------------- */}
       <Section>
+        <Reveal>
+          <SectionHeading
+            eyebrow={copy.method.eyebrow}
+            title={copy.method.title}
+            description={copy.method.description}
+          />
+        </Reveal>
+
+        <Reveal delay={60}>
+          <ol className="mt-10 grid gap-px overflow-hidden rounded-[4px] border border-line bg-line sm:grid-cols-2 lg:grid-cols-3">
+            {copy.method.steps.map((step) => (
+              <li key={step.key} className="bg-white px-5 py-5">
+                <p className="num text-[0.62rem] text-gold-500">{step.key}</p>
+                <h3 className="mt-1.5 text-base text-navy-900">{step.label}</h3>
+                <p className="mt-2 text-xs leading-relaxed text-muted">
+                  {step.body}
+                </p>
+              </li>
+            ))}
+          </ol>
+        </Reveal>
+
+        {/* Product thinking diagram — the narrative spine of the site. */}
+        <Reveal delay={100}>
+          <div className="mt-12">
+            <p className="font-mono text-[0.6rem] uppercase tracking-[0.16em] text-gold-600">
+              {copy.method.flowLabel}
+            </p>
+            <div className="mt-5 overflow-hidden rounded-[4px] border border-line bg-white p-5 sm:p-6">
+              <ol className="space-y-0">
+                {copy.method.flow.map((node, i) => (
+                  <li key={node.label}>
+                    <div className="flex items-baseline gap-3 py-2">
+                      <span className="w-6 shrink-0 font-mono text-[0.55rem] text-faint">
+                        {String(i + 1).padStart(2, '0')}
+                      </span>
+                      <span className="text-sm font-medium text-navy-900">
+                        {node.label}
+                      </span>
+                      <span className="text-xs leading-relaxed text-muted">
+                        {node.detail}
+                      </span>
+                    </div>
+                    {i < copy.method.flow.length - 1 ? (
+                      <div className="ml-3 h-3 border-l border-dashed border-gold-500/40" />
+                    ) : null}
+                  </li>
+                ))}
+              </ol>
+            </div>
+          </div>
+        </Reveal>
+      </Section>
+
+      {/* ---------------- decision frameworks ---------------- */}
+      <Section className="border-y border-line bg-paper-2">
         <Reveal>
           <SectionHeading
             eyebrow={copy.s1.eyebrow}
@@ -301,28 +356,9 @@ export default function ProductOwner() {
           </div>
         </Reveal>
 
-        <div className="mt-8 grid gap-4 lg:grid-cols-2">
-          {c.deliveryHygiene.map((d, i) => (
-            <Reveal key={d.label} delay={i * 60}>
-              <DeliveryPanel label={copy.s8.hygieneKicker} title={d.label}>
-                <ul className="space-y-2">
-                  {d.items.map((item) => (
-                    <li
-                      key={item}
-                      className="flex gap-2.5 text-sm leading-relaxed text-ink-soft"
-                    >
-                      <span className="mt-[7px] h-1 w-1 shrink-0 rounded-full bg-gold-500/70" />
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </DeliveryPanel>
-            </Reveal>
-          ))}
-        </div>
       </Section>
 
-      {/* ---------------- lifecycle artefacts & stakeholders ---------------- */}
+      {/* ---------------- lifecycle artefacts ---------------- */}
       <Section>
         <Reveal>
           <SectionHeading
@@ -341,21 +377,6 @@ export default function ProductOwner() {
           </div>
         </Reveal>
 
-        <Reveal delay={120}>
-          <div className="mt-8">
-            <DataTable
-              columns={copy.s9.stakeholderColumns}
-              rows={c.stakeholderMap.map((s) => [
-                s.role,
-                s.accountable,
-                s.consults,
-                s.artefact,
-              ])}
-              caption={copy.s9.stakeholderCaption}
-            />
-          </div>
-        </Reveal>
-
         <Reveal delay={140}>
           <div className="mt-10">
             <Callout tone="insight" title={copy.s9.calloutTitle}>
@@ -367,10 +388,10 @@ export default function ProductOwner() {
         <div className="mt-10">
           <ExploreNext
             items={[
-              { label: c.navItems[6].label, to: '/case-studies', hint: 'Each with PO lens' },
-              { label: c.navItems[4].label, to: '/digital-wealth', hint: 'Stage-level detail' },
-              { label: c.navItems[2].label, to: '/product-logic', hint: 'Lifecycle & framework' },
-              { label: c.navItems[5].label, to: '/ai-wealth', hint: 'Delivery phases' },
+              { label: t.nav.cases, to: '/case-studies', hint: t.hints.eachWithPoLens },
+              { label: t.nav.digital, to: '/digital-wealth', hint: t.hints.stageLevelDetail },
+              { label: t.nav.logic, to: '/product-logic', hint: t.hints.lifecycleFramework },
+              { label: t.nav.ai, to: '/ai-wealth', hint: t.hints.deliveryPhases },
             ]}
           />
         </div>

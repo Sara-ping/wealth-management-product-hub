@@ -77,63 +77,7 @@ export function Accordion({
 }
 
 /* ------------------------------------------------------------------ */
-/* Tabs                                                                */
-/* ------------------------------------------------------------------ */
-
-export function Tabs({
-  tabs,
-  dark = false,
-}: {
-  tabs: { id: string; label: string; content: ReactNode }[]
-  dark?: boolean
-}) {
-  const [active, setActive] = useState(tabs[0]?.id)
-
-  return (
-    <div>
-      <div
-        className={`flex gap-1 overflow-x-auto no-scrollbar border-b ${
-          dark ? 'border-white/15' : 'border-line'
-        }`}
-        role="tablist"
-      >
-        {tabs.map((tab) => (
-          <button
-            key={tab.id}
-            role="tab"
-            aria-selected={active === tab.id}
-            type="button"
-            onClick={() => setActive(tab.id)}
-            className={`relative shrink-0 px-4 py-3 text-sm transition-colors ${
-              active === tab.id
-                ? dark
-                  ? 'text-white'
-                  : 'text-navy-900'
-                : dark
-                  ? 'text-white/50 hover:text-white/80'
-                  : 'text-muted hover:text-navy-900'
-            }`}
-          >
-            {tab.label}
-            {active === tab.id ? (
-              <span className="absolute inset-x-2 -bottom-px h-[2px] bg-gold-500" />
-            ) : null}
-          </button>
-        ))}
-      </div>
-      <div className="pt-6">
-        {tabs.find((t) => t.id === active)?.content}
-      </div>
-    </div>
-  )
-}
-
-/* ------------------------------------------------------------------ */
-/* Filter select                                                       */
-/* ------------------------------------------------------------------ */
-
-
-
+/* Search palette                                                      */
 /* ------------------------------------------------------------------ */
 /* Search palette                                                      */
 /* ------------------------------------------------------------------ */

@@ -7,8 +7,6 @@ export const pages = {
     hero: {
       eyebrow: 'Financial Products',
       title: 'Product Explorer',
-      subtitle:
-        'Eight product families documented through the questions that matter in a bank: what the product is, why it exists, how the investor makes money, what can go wrong, who it suits and how it is distributed.',
     },
     browse: {
       eyebrow: 'Product catalogue',
@@ -16,14 +14,43 @@ export const pages = {
       description:
         'Eight product families documented through the questions that matter in a bank — what the product is, why it exists, how the investor makes money, what can go wrong, who it suits and how it is distributed.',
     },
-    glance: {
-      eyebrow: 'At a glance',
-      title: 'Product comparison',
+    compare: {
+      eyebrow: 'Comparison',
+      title: 'Products side by side',
       description:
-        'The same catalogue sorted by the classification dimensions used in suitability and product governance.',
+        'The same classification the shelf and suitability rules use, so the differences are visible without opening every page.',
+      columns: ['Product', 'Return', 'Key risk', 'Customer use case', 'Key rules'],
+      caption:
+        'Indicative classifications for comparison. Actual terms depend on the specific instrument and jurisdiction.',
     },
-    caption:
-      'Indicative classification for educational comparison. Actual classification depends on the specific instrument, jurisdiction and client categorisation.',
+    framework: {
+      eyebrow: 'Product Thinking Framework',
+      title: 'Every product should answer six questions',
+      description:
+        'These are the questions a product has to answer before it can be specified — and the four-step path from that answer to something a team can build and test.',
+      questions: [
+        { key: '01', label: 'Who is it for?', body: 'Target market, segment and the client profile it fits.' },
+        { key: '02', label: 'What is the objective?', body: 'Growth, income, protection, stability or liquidity.' },
+        { key: '03', label: 'How does the client make money?', body: 'The return mechanism, stated plainly.' },
+        { key: '04', label: 'What can go wrong?', body: 'The risks actually being taken, and who carries them.' },
+        { key: '05', label: 'What are the key rules?', body: 'Eligibility, minimums, timing and restrictions.' },
+        { key: '06', label: 'How is it distributed and serviced?', body: 'Advised or execution-only, and the after-sales path.' },
+      ],
+      pathLabel: 'From product to buildable requirement',
+      path: [
+        { label: 'Product', detail: 'What it is and who it suits' },
+        { label: 'Business Requirement', detail: 'What the bank must be able to do' },
+        { label: 'System Behaviour', detail: 'What the platform does at each step' },
+        { label: 'Control / Evidence', detail: 'What proves it happened correctly' },
+      ],
+      exploreLabel: 'Read the framework in detail',
+      wealthHint: 'Where these products sit in the bank',
+      digitalHint: 'Journey, rules and requirements per stage',
+      aiHint: 'How AI assists inside the journey',
+    },
+    illustrativeTitle: 'Illustrative content',
+    illustrativeBody:
+      'Mechanics, diagrams and figures on the product pages are simplified educational illustrations. They are not recommendations, do not represent a product offered by any bank, and actual pricing, eligibility and documentation depend on the issuer, jurisdiction and client categorisation.',
   },
 
   productLogic: {
@@ -87,9 +114,7 @@ export const pages = {
       eyebrow: 'Client Segmentation',
       title: 'Retail · Affluent · HNW · UHNW',
       description:
-        'The same bank serves very different clients. Segmentation determines service model, advisory model, product complexity and the role digital plays.',
-      caption:
-        'Segmentation thresholds and naming conventions vary between institutions; the structural differences are consistent.',
+        'The same bank serves very different clients. Segmentation determines service model, advisory model, product complexity and the role digital plays. Thresholds and naming conventions vary between institutions; the structural differences are consistent.',
       labels: [
         'Client needs',
         'Service model',
@@ -97,7 +122,6 @@ export const pages = {
         'Product complexity',
         'Digital experience',
       ],
-      segmentColumn: 'Segment',
     },
     personas: {
       eyebrow: 'Client Needs',
@@ -166,11 +190,11 @@ export const pages = {
       eyebrow: 'Design Principles',
       title: 'What makes a digital wealth journey work',
       description:
-        'Four principles that recur across every stage of the journey above — and that separate a usable platform from a compliant-looking one.',
+        'Three principles that recur across every stage of the journey above — and that separate a usable platform from a compliant-looking one.',
       items: [
         {
-          title: 'Show the money',
-          body: 'Rate, margin, fees and total amount are displayed before commitment. Transparency is a product feature, not a legal footnote.',
+          title: 'A journey is a chain of decisions, not a set of screens',
+          body: 'Each stage exists to produce a decision and its evidence. If a screen does not change what the bank or the client can do next, it is decoration.',
         },
         {
           title: 'Status is part of the product',
@@ -180,26 +204,6 @@ export const pages = {
           title: 'Exceptions are designed, not discovered',
           body: 'Each stage needs a defined failure path with an owner, an SLA and a client message written in advance.',
         },
-        {
-          title: 'Explain before asking',
-          body: 'A client who understands why a question is asked answers it accurately. Every data request in the journey should carry its reason.',
-        },
-      ],
-    },
-    metrics: {
-      kicker: 'How to measure the journey',
-      title: 'Metrics a Product Owner should own',
-      poNote:
-        'Baselines, targets and the guardrails that must not degrade are defined on the Product Owner Lens page.',
-      items: [
-        { metric: 'Completion rate', note: 'Started journeys that reach a completed outcome' },
-        { metric: 'Time to complete', note: 'Median duration from entry to confirmation' },
-        { metric: 'Error rate', note: 'Submissions rejected by validation or downstream checks' },
-        { metric: 'Drop-off by stage', note: 'Where clients abandon, and why' },
-        { metric: 'Exception volume', note: 'Operational exceptions raised per thousand orders' },
-        { metric: 'Digital adoption', note: 'Clients completing the journey without assistance' },
-        { metric: 'Straight-through rate', note: 'Orders processed with no manual intervention' },
-        { metric: 'Audit completeness', note: 'Journeys with a fully reconstructable evidence trail' },
       ],
     },
     buttons: {
@@ -271,7 +275,7 @@ export const pages = {
       eyebrow: 'Case Studies',
       title: 'From Business Problem to Digital Product',
       subtitle:
-        'Four wealth management journeys worked end to end: the business problem, the client need, the product, the rules, the journey, the requirements, the data, the integration, the controls and the metrics — then the same case viewed through a Product Owner lens.',
+        'Four wealth management journeys worked end to end: the business problem, the client need, the product, the rules, the journey, the requirements, the data and the integration — then the same case viewed through a Product Owner lens.',
     },
     overview: {
       eyebrow: 'Overview',
@@ -279,11 +283,17 @@ export const pages = {
       description:
         'Each case follows the same structure so that the thinking is comparable — and so a reader can see the method rather than only the content.',
     },
+    more: {
+      eyebrow: 'More Cases',
+      title: 'Two further cases, same method',
+      description:
+        'Bond investment and structured product subscription, worked to the same structure. They are available in full below without competing with the two flagship cases.',
+    },
     note: {
       kicker: 'Note on method',
       title: 'These are illustrative cases, written to show the method',
       body:
-        'The journeys, rules, APIs and metrics are representative examples built for this portfolio project. They are not descriptions of systems belonging to any specific institution, and the figures used are illustrative rather than measured results.',
+        'The journeys, rules and APIs are representative examples built for this portfolio project. They are not descriptions of systems belonging to any specific institution, and the figures used are illustrative rather than measured results.',
     },
   },
 
@@ -301,6 +311,33 @@ export const pages = {
         'Prioritisation',
         'Risk register',
         'API touchpoints',
+      ],
+    },
+    method: {
+      eyebrow: 'The Method',
+      title: 'How I think as a Product Owner',
+      description:
+        'The same loop runs on every piece of work on this site. Each step ends in an artefact someone else can act on.',
+      steps: [
+        { key: '01', label: 'Discover', body: 'Client problem, business problem and the constraint that makes it real.' },
+        { key: '02', label: 'Define', body: 'Journey, business rules and requirements with testable acceptance criteria.' },
+        { key: '03', label: 'Prioritise', body: 'What is a precondition, what is scored, and what is deliberately deferred.' },
+        { key: '04', label: 'Deliver', body: 'Increments with a scope, a dependency and an exit criterion.' },
+        { key: '05', label: 'Measure', body: 'A target and a guardrail for every metric — never a target alone.' },
+        { key: '06', label: 'Control', body: 'Risk, control, requirement and the evidence that proves it works.' },
+      ],
+      flowLabel: 'From customer problem to outcome',
+      flow: [
+        { label: 'Customer Problem', detail: 'What the client cannot do today' },
+        { label: 'Product Logic', detail: 'What the product must be true of' },
+        { label: 'Business Rules', detail: 'The constraints that govern it' },
+        { label: 'Customer Journey', detail: 'How the client moves through it' },
+        { label: 'Requirements', detail: 'What the team must build' },
+        { label: 'System / API', detail: 'How the platforms behave' },
+        { label: 'Risk & Controls', detail: 'What proves it worked' },
+        { label: 'Prioritisation', detail: 'What ships first, and why' },
+        { label: 'Release', detail: 'Increments with exit criteria' },
+        { label: 'Outcome', detail: 'Measured against a guardrail' },
       ],
     },
     s1: {
@@ -369,17 +406,13 @@ export const pages = {
       description:
         'Sequenced so that controls land before transactions, and transactions land before analytics.',
       columns: ['Increment', 'Scope', 'Outcome', 'Dependencies', 'Exit criteria'],
-      hygieneKicker: 'Delivery hygiene',
     },
     s9: {
-      eyebrow: '09 · Lifecycle & Stakeholders',
+      eyebrow: '09 · Lifecycle & Artefacts',
       title: 'What a Product Owner produces at each lifecycle stage',
       description:
         'The lifecycle view from the product logic page, translated into the artefacts and decisions I own.',
       lifecycleColumns: ['Lifecycle stage', 'Product Owner artefact', 'Decision to make'],
-      stakeholderColumns: ['Role', 'Accountable for', 'Consults', 'Artefact'],
-      stakeholderCaption:
-        'A stakeholder map is not an org chart — it exists so that decision rights are explicit before a disagreement happens.',
       calloutTitle: 'How to read this site as a hiring manager',
       calloutBody:
         'Financial product pages show what I know. This page, the digital journey and the case studies show how I work: problem framing, rules, journeys, requirements, integration, controls and measurement.',
@@ -402,16 +435,10 @@ export const pages = {
           'Described at a level I can substantiate in an interview: the type of work, the type of problems and the type of stakeholders — without claiming seniority or scope I do not have.',
       },
       learning: {
-        eyebrow: 'Self-directed Learning',
-        title: 'What I have taught myself',
+        eyebrow: 'Learning & Projects',
+        title: 'What I have taught myself and built',
         description:
-          'Topics I studied independently to deepen my product and technology understanding. Listed separately from professional experience so the distinction is explicit.',
-      },
-      projects: {
-        eyebrow: 'Personal Projects',
-        title: 'What I have built',
-        description:
-          'Portfolio and learning artefacts built outside of work. This site is the main one; it is a knowledge project as much as a portfolio piece.',
+          'Self-directed study and portfolio artefacts, listed separately from professional experience so the distinction stays explicit. This site is the main project.',
       },
     },
     sidebar: {

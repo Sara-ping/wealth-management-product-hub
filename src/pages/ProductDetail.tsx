@@ -31,8 +31,7 @@ export default function ProductDetail() {
         title={product.name}
         subtitle={product.tagline}
         crumbs={[
-          { label: t.common.breadcrumbHome, to: '/' },
-          { label: t.nav.products, to: '/products' },
+          { label: t.nav.products, to: '/' },
           { label: product.name },
         ]}
         meta={

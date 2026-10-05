@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { Badge, Panel } from '@/components/ui/primitives'
+import { Badge } from '@/components/ui/primitives'
 import { DataTable } from '@/components/ui/diagrams'
 import { useI18n } from '@/i18n/LanguageContext'
 
@@ -475,28 +475,4 @@ function Block({ label, children }: { label: string; children: ReactNode }) {
   )
 }
 
-/* ------------------------------------------------------------------ */
-/* Labelled panel helper                                               */
-/* ------------------------------------------------------------------ */
 
-export function DeliveryPanel({
-  label,
-  title,
-  children,
-}: {
-  label: string
-  title: string
-  children: ReactNode
-}) {
-  return (
-    <Panel className="p-0" padding="">
-      <div className="border-b border-line bg-paper px-5 py-4">
-        <p className="font-mono text-[0.58rem] uppercase tracking-[0.16em] text-gold-600">
-          {label}
-        </p>
-        <h3 className="mt-1.5 text-[0.95rem] text-navy-900">{title}</h3>
-      </div>
-      <div className="px-5 py-5">{children}</div>
-    </Panel>
-  )
-}

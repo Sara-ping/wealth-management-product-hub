@@ -132,8 +132,6 @@ export interface CaseStudy {
   functionalRequirements: string[]
   data: string[]
   api: string[]
-  riskCompliance: string[]
-  successMetrics: { metric: string; description: string }[]
   po: {
     customerProblem: string
     businessValue: string[]
@@ -143,7 +141,6 @@ export interface CaseStudy {
     dependencies: string[]
     risks: string[]
     prioritization: { item: string; rationale: string; priority: 'Must' | 'Should' | 'Could' }[]
-    metrics: string[]
   }
 }
 

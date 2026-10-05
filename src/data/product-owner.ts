@@ -485,68 +485,6 @@ export const releasePlan = [
 /* Delivery hygiene                                                    */
 /* ------------------------------------------------------------------ */
 
-export const deliveryHygiene = [
-  {
-    label: 'Definition of Ready',
-    items: [
-      'Problem statement, affected segment and hypothesis written',
-      'Business rules and regulatory constraints identified with an owner',
-      'Data sources and system touchpoints confirmed',
-      'Acceptance criteria written and reviewed by compliance where relevant',
-      'Dependency owners named and available',
-    ],
-  },
-  {
-    label: 'Definition of Done',
-    items: [
-      'Acceptance criteria demonstrated in a test environment',
-      'Audit/evidence requirements implemented, not deferred',
-      'Exception paths and client messaging tested, not only the happy path',
-      'Operational runbook and support ownership agreed',
-      'Metric instrumentation live before release, not after',
-    ],
-  },
-]
-
-export const stakeholderMap = [
-  {
-    role: 'Product Owner',
-    accountable: 'Problem framing, scope, prioritisation, outcome metrics',
-    consults: 'Business, compliance, operations, technology',
-    artefact: 'Product brief, backlog, release plan, KPI review',
-  },
-  {
-    role: 'Business Analyst',
-    accountable: 'Requirements, business rules, data and integration analysis',
-    consults: 'Subject-matter experts, operations, technology',
-    artefact: 'Requirements, process maps, acceptance criteria, impact analysis',
-  },
-  {
-    role: 'Compliance / Legal',
-    accountable: 'Regulatory interpretation and control adequacy',
-    consults: 'Product Owner, risk',
-    artefact: 'Control requirements, disclosure sign-off, approval records',
-  },
-  {
-    role: 'Risk (Conduct / Model)',
-    accountable: 'Risk acceptance, thresholds, monitoring',
-    consults: 'Product Owner, compliance',
-    artefact: 'Risk assessment, guardrail thresholds, model validation',
-  },
-  {
-    role: 'Operations',
-    accountable: 'Exception handling, SLAs, manual fallbacks',
-    consults: 'Business Analyst, technology',
-    artefact: 'Runbook, exception queue design, SLA definitions',
-  },
-  {
-    role: 'Engineering / Architecture',
-    accountable: 'System design, API contracts, non-functional requirements',
-    consults: 'Product Owner, BA, security',
-    artefact: 'API specification, integration design, test evidence',
-  },
-]
-
 /* ------------------------------------------------------------------ */
 /* Lifecycle artefacts (what a PO produces at each stage)              */
 /* ------------------------------------------------------------------ */

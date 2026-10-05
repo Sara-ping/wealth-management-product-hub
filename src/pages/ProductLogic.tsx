@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { PageHero, Section } from '@/components/layout/PageShell'
-import { Badge, Panel, Reveal, SectionHeading } from '@/components/ui/primitives'
+import { Reveal, SectionHeading } from '@/components/ui/primitives'
 import { DataTable, ProcessFlow } from '@/components/ui/diagrams'
 import { ExploreNext, FrameworkPanel } from '@/components/blocks/BlockRenderer'
 import { useContent, useI18n } from '@/i18n/LanguageContext'
@@ -29,53 +29,42 @@ export default function ProductLogic() {
           />
         </Reveal>
 
-        <div className="mt-10 grid gap-4 lg:grid-cols-2">
+        <div className="mt-10 space-y-px overflow-hidden rounded-[4px] border border-line bg-line">
           {c.logicConcepts.map((concept, i) => (
-            <Reveal key={concept.id} delay={i * 60} className="h-full">
-              <Panel hover className="h-full p-0" padding="">
-                <div className="flex h-full flex-col">
-                  <div className="border-b border-line px-6 py-5">
-                    <div className="flex items-start justify-between gap-4">
-                      <div>
-                        <p className="num text-[0.62rem] text-gold-500">
-                          {String(i + 1).padStart(2, '0')}
-                        </p>
-                        <h3 className="mt-2 text-lg text-navy-900">
-                          {concept.title}
-                        </h3>
-                      </div>
-                      <Badge tone="navy">{t.common.concept}</Badge>
-                    </div>
-                    <p className="mt-3 text-sm font-medium text-navy-800">
-                      {concept.question}
+            <Reveal key={concept.id}>
+              <div className="bg-white px-5 py-5 sm:px-6">
+                <div className="grid gap-3 lg:grid-cols-[220px_minmax(0,1fr)_minmax(0,1fr)] lg:gap-8">
+                  <div>
+                    <p className="num text-[0.62rem] text-gold-500">
+                      {String(i + 1).padStart(2, '0')}
                     </p>
-                    <p className="mt-3 text-sm leading-relaxed text-muted">
+                    <h3 className="mt-1.5 text-base text-navy-900">
+                      {concept.title}
+                    </h3>
+                    <p className="mt-2 text-xs leading-relaxed text-muted lg:hidden">
                       {concept.explanation}
                     </p>
                   </div>
-                  <div className="flex-1 px-6 py-5">
-                    <ul className="space-y-2">
-                      {concept.points.map((point) => (
-                        <li
-                          key={point}
-                          className="flex gap-2.5 text-sm leading-relaxed text-ink-soft"
-                        >
-                          <span className="mt-[7px] h-1 w-1 shrink-0 rounded-full bg-gold-500/70" />
-                          <span>{point}</span>
-                        </li>
-                      ))}
-                    </ul>
+
+                  <div>
+                    <p className="text-sm leading-relaxed text-ink-soft">
+                      {concept.question}
+                    </p>
+                    <p className="mt-3 hidden text-xs leading-relaxed text-muted lg:block">
+                      {concept.explanation}
+                    </p>
                   </div>
-                  <div className="border-t border-line bg-paper px-6 py-4">
-                    <p className="font-mono text-[0.6rem] uppercase tracking-[0.16em] text-gold-600">
+
+                  <div>
+                    <p className="font-mono text-[0.56rem] uppercase tracking-[0.14em] text-gold-600">
                       {t.common.poLens}
                     </p>
-                    <p className="mt-2 text-xs leading-relaxed text-muted">
+                    <p className="mt-1.5 text-xs leading-relaxed text-muted">
                       {concept.poNote}
                     </p>
                   </div>
                 </div>
-              </Panel>
+              </div>
             </Reveal>
           ))}
         </div>
@@ -158,29 +147,13 @@ export default function ProductLogic() {
           </div>
         </Reveal>
 
-        <Reveal delay={120}>
-          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {c.frameworkQuestions.map((q) => (
-              <div
-                key={q.question}
-                className="rounded-[3px] border border-line bg-white px-5 py-4"
-              >
-                <p className="text-sm font-medium text-navy-900">{q.question}</p>
-                <p className="mt-2 text-xs leading-relaxed text-muted">
-                  {q.answer}
-                </p>
-              </div>
-            ))}
-          </div>
-        </Reveal>
-
         <div className="mt-14">
           <ExploreNext
             items={[
-              { label: t.nav.products, to: '/products', hint: 'See the framework applied' },
-              { label: c.navItems[4].label, to: '/digital-wealth', hint: 'Requirements per stage' },
-              { label: c.navItems[6].label, to: '/case-studies', hint: 'Business problem to metrics' },
-              { label: t.common.poLens, to: '/product-owner', hint: 'Stories, KPIs, risk register' },
+              { label: t.nav.products, to: '/', hint: t.hints.seeFrameworkApplied },
+              { label: t.nav.digital, to: '/digital-wealth', hint: t.hints.requirementsPerStage },
+              { label: t.nav.cases, to: '/case-studies', hint: t.hints.businessProblemToMetrics },
+              { label: t.common.poLens, to: '/product-owner', hint: t.hints.storiesKpisRisks },
             ]}
           />
         </div>

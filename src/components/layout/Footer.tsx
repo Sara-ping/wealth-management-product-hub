@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 import { useContent, useI18n } from '@/i18n/LanguageContext'
 
 export function Footer() {
@@ -15,7 +15,7 @@ export function Footer() {
                 W
               </span>
               <span className="font-serif text-[0.95rem] text-white">
-                Wealth Management Product Hub
+                {t.common.siteName}
               </span>
             </div>
             <p className="mt-4 max-w-md text-sm leading-relaxed text-white/55">
@@ -30,25 +30,25 @@ export function Footer() {
             <p className="font-mono text-[0.6rem] uppercase tracking-[0.16em] text-gold-400">
               {t.footer.explore}
             </p>
+            {/* Same array as the header, so the two can never drift apart. */}
             <ul className="mt-4 space-y-2.5">
-              {c.navItems.slice(1).map((item) => (
+              {c.headerNavItems.map((item) => (
                 <li key={item.to}>
-                  <Link
+                  <NavLink
                     to={item.to}
-                    className="text-sm text-white/60 transition-colors hover:text-white"
+                    end={item.end}
+                    className={({ isActive }) =>
+                      `text-sm transition-colors ${
+                        isActive
+                          ? 'text-gold-400'
+                          : 'text-white/60 hover:text-white'
+                      }`
+                    }
                   >
                     {item.label}
-                  </Link>
+                  </NavLink>
                 </li>
               ))}
-              <li>
-                <Link
-                  to="/product-owner"
-                  className="text-sm text-gold-400 transition-colors hover:text-white"
-                >
-                  {t.common.poLens}
-                </Link>
-              </li>
             </ul>
           </div>
 
